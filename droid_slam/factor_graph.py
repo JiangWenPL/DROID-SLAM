@@ -1,6 +1,7 @@
 import torch
 import lietorch
 import numpy as np
+from tqdm import tqdm
 
 import matplotlib.pyplot as plt
 from lietorch import SE3
@@ -256,8 +257,8 @@ class FactorGraph:
         num, rig, ch, ht, wd = self.video.fmaps.shape
         corr_op = AltCorrBlock(self.video.fmaps.view(1, num*rig, ch, ht, wd))
 
-        for step in range(steps):
-            print("Global BA Iteration #{}".format(step+1))
+        for step in tqdm(range(steps), desc=" Global BA"):
+            # print("Global BA Iteration #{}".format(step+1))
             with torch.cuda.amp.autocast(enabled=False):
                 coords1, mask = self.video.reproject(self.ii, self.jj)
                 motn = torch.cat([coords1 - self.coords0, self.target - coords1], dim=-1)
