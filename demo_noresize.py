@@ -46,8 +46,9 @@ def image_stream(imagedir, calib, stride, depthdir=None):
             image = cv2.undistort(image, K, calib[4:])
 
         h0, w0, _ = image.shape
-        h1 = int(h0 * np.sqrt((384 * 512) / (h0 * w0)))
-        w1 = int(w0 * np.sqrt((384 * 512) / (h0 * w0)))
+        h1, w1 = h0, w0
+        # h1 = int(h0 * np.sqrt((384 * 512) / (h0 * w0)))
+        # w1 = int(w0 * np.sqrt((384 * 512) / (h0 * w0)))
 
         image = cv2.resize(image, (w1, h1))
         image = image[:h1-h1%8, :w1-w1%8]
@@ -151,3 +152,4 @@ if __name__ == '__main__':
         save_reconstruction(droid, args.reconstruction_path)
 
     traj_est = droid.terminate(image_stream(args.imagedir, args.calib, args.stride))
+    breakpoint()
